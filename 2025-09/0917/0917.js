@@ -11,7 +11,7 @@ function solution() {
   let answers = 0;
   for (let i = 0; i < cardNum; i++) {
     for (let j = i + 1; j < cardNum; j++) {
-      for (let k = i + 2; k < cardNum; k++) {
+      for (let k = j + 1; k < cardNum; k++) {
         const sum = numbers[i] + numbers[j] + numbers[k];
         const gap = maximum - sum;
         if (gap >= 0 && answers <= sum) {
