@@ -41,7 +41,6 @@ function checkBoard(board, key, lock) {
 // 즉, board의 값이 2가 되면 안되고, board의 값이 0이 되면 안됨
 // board의 lock에 해당하는 위치 값이 모두 1이어야 함
 function checkKeyAndLock(board, key, lock) {
-  const boardCorrect = []
   for (let r = 0; r < key.length + lock.length - 1; r += 1) {
     for (let c = 0; c < key.length + lock.length - 1; c += 1) {
       const tmpBoard = board.map((row) => [...row])
@@ -50,10 +49,11 @@ function checkKeyAndLock(board, key, lock) {
           tmpBoard[r + kr][c + kc] += key[kr][kc]
         }
       }
-      boardCorrect.push(checkBoard(tmpBoard, key, lock))
+      if (checkBoard(tmpBoard, key, lock)) {
+        return true
+      }
     }
   }
-  return boardCorrect.some((val) => val === true)
 }
 
 // key를 90도 로테이션하는 기능 필요
