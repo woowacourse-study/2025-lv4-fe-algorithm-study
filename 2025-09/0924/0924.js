@@ -44,7 +44,6 @@ function dfs(idx, n) {
     }
   }
 }
-
 const answer = [];
 
 for (let i = 1; i < n + 1; i++) {
@@ -58,17 +57,23 @@ function bfs(idx) {
   }
 
   const queue = [];
+  const visited = new Array(n + 1).fill(false);
   queue.push([idx, 1]);
+  visited[idx] = true;
   while (queue.length > 0) {
     // console.log(queue);
     const [i, count] = queue.shift();
 
     for (let k = 0; k < subway[i].length; k++) {
-      if (cycle[subway[i][k]]) {
+      const next = subway[i][k];
+      if (cycle[next]) {
         answer.push(count);
         return;
-      } else {
-        queue.push([subway[i][k], count + 1]);
+      }
+      if (!visited[next]) {
+        // 방문하지 않은 경우에만 큐에 추가
+        visited[next] = true;
+        queue.push([next, count + 1]);
       }
     }
   }
