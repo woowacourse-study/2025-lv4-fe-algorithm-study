@@ -1,13 +1,19 @@
-function solution(new_id) {
-  new_id = new_id.toLowerCase();
-  new_id = new_id.replace(/[^a-z0-9-_.]/g, "");
-  new_id = new_id.replace(/\.{2,}/g, ".");
-  new_id = new_id.replace(/^\.|\.$/g, "");
-  if (new_id === "") new_id = "a";
-  if (new_id.length >= 16) new_id = new_id.slice(0, 15).replace(/\.$/, "");
-  while (new_id.length < 3) {
-    new_id += new_id[new_id.length - 1];
+function solution(n, tops) {
+  const MOD = 10007;
+  let dp = Array.from({ length: n }, () => [0, 0]);
+
+  dp[0][0] = 1;
+  dp[0][1] = tops[0] ? 3 : 2;
+
+  for (let i = 1; i < n; i++) {
+    if (tops[i] === 0) {
+      dp[i][0] = (dp[i - 1][0] + dp[i - 1][1]) % MOD;
+      dp[i][1] = (dp[i - 1][0] + 2 * dp[i - 1][1]) % MOD;
+    } else {
+      dp[i][0] = (dp[i - 1][0] + dp[i - 1][1]) % MOD;
+      dp[i][1] = (2 * dp[i - 1][0] + 3 * dp[i - 1][1]) % MOD;
+    }
   }
 
-  return new_id;
+  return (dp[n - 1][0] + dp[n - 1][1]) % MOD;
 }
