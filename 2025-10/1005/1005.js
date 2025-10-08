@@ -21,7 +21,10 @@ function solution(today, terms, privacies) {
     const expiration = Number(termsMap.find((term) => term[0] === sort)[1]);
     let [year, month, day] = date.split('.').map(Number);
 
-    const sum = month + expiration;
+    if (expiration >= 12) {
+      year += parseInt(expiration / 12);
+    }
+    const sum = month + expiration - 12 * parseInt(expiration / 12);
 
     if (sum > 12) {
       year += 1;
@@ -41,7 +44,7 @@ function solution(today, terms, privacies) {
         day -= 1;
       }
     }
-    console.log(year, month, day);
+    // console.log(year,month,day)
     if (isDelete(year, month, day)) {
       answer.push(i + 1);
     }
