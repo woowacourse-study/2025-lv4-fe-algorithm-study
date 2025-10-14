@@ -1,46 +1,43 @@
-const input = require('fs').readFileSync('input.txt').toString().split('\n');
+let [mn, ...array] = require('fs')
+  .readFileSync('input.txt')
+  .toString()
+  .trim()
+  .split('\n');
 
-const [tx, ty] = input().split(' ').map(Number);
-let visited = Array.from({ length: ty }, () => Array(tx).fill(0));
-let maze = Array.from({ length: ty }, () => input().split('').map(Number));
+const [m, n] = mn.split(' ').map(Number);
+const map = array.map((a) => a.trim().split('').map(Number));
+const visited = new Array(n).fill(false).map((_) => new Array(n).fill(false));
 
-const queue = [[0, 0, 0]];
-visited[0][0] = 1;
+const dx = [0, 0, 1, -1];
+const dy = [1, -1, 0, 0];
 
-const move = {
-  up(x, y) {
-    return [x, y - 1];
-  },
-  down(x, y) {
-    return [x, y + 1];
-  },
-  right(x, y) {
-    return [x + 1, y];
-  },
-  left(x, y) {
-    return [x - 1, y];
-  },
-};
+function dfs() {
+  const queue = [];
+  queue.push([0, 0, 0]);
+  visited[0][0] = true;
 
-while (queue.length) {
-  const [x, y, time] = queue.shift();
-  // console.log(x,y,time);
-  if (x === tx - 1 && y === ty - 1) {
-    // console.log('>>>',x,y,time);
-    console.log(time);
-    break;
-  }
+  while (queue.length > 0) {
+    const [x, y, cnt] = queue.shift();
 
-  for (action of ['up', 'down', 'right', 'left']) {
-    const [nx, ny] = move[action](x, y);
-    if (ny < 0 || ny >= ty || nx < 0 || nx >= tx) continue;
-    if (visited[ny][nx]) continue;
-    if (maze[ny][nx]) {
-      queue.push([nx, ny, time + 1]);
-      visited[ny][nx] = 1;
-    } else {
-      queue.unshift([nx, ny, time]);
-      visited[ny][nx] = 1;
+    if (x === n - 1 && y === m - 1) {
+      console.log(cnt);
+      return;
+    }
+
+    for (let i = 0; i < 4; i++) {
+      const nx = x + dx[i];
+      const ny = y + dy[i];
+      if (nx >= 0 && nx < n && ny >= 0 && ny < m && !visited[nx][ny]) {
+        visited[nx][ny] = true;
+
+        if (map[nx][ny] === 1) {
+          queue.push([nx, ny, cnt + 1]);
+        } else {
+          queue.unshift([nx, ny, cnt]);
+        }
+      }
     }
   }
 }
+
+dfs();
